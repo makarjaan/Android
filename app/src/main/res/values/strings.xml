@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">AndroidWork</string>
+    <string name="app_name">Android</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_fragment_hint">Введите ваш текст</string>
+    <string name="main_first_button_text">Второй экран</string>
+    <string name="main_third_button_text">Боттом шит</string>
+    <string name="second_screen_button_text">Третий экран</string>
+    <string name="bottom_sheet_text">Боттом шит</string>
+    <string name="BotoomSheetBtnText">Передайте текст</string>
 </resources>
