@@ -1,29 +1,24 @@
 package ru.itis.apphomework2.screens
 
-import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.core.view.size
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import ru.itis.apphomework2.R
 import ru.itis.apphomework2.adapter.AdapterWithMultipleHolders
 import ru.itis.apphomework2.databinding.FragmentMultipleTypesBinding
 import ru.itis.apphomework2.model.ListData
-import ru.itis.apphomework2.model.ListDetailedData
 import ru.itis.apphomework2.repository.ScreensContentRepository
 import ru.itis.apphomework2.repository.ScreensDetailedContentRepo
 import ru.itis.apphomework2.ui.decorator.SimpleDecorator
+import ru.itis.apphomework2.utils.DisplayType
 import ru.itis.apphomework2.utils.getValueInDp
 import kotlin.random.Random
 
@@ -36,6 +31,10 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
 
     private var isGridLayout = false
 
+    private var isThirdGridLayout = false
+
+    private var currentDisplayType = DisplayType.LIST
+
     private var currentDataList = mutableListOf<ListData>()
 
 
@@ -47,11 +46,6 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
             currentDataList = ScreensContentRepository.getListContent(requireContext()).toMutableList()
         }
         initRecycleView()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(ARG_GRID, isGridLayout)
     }
 
     private fun initViews() {
@@ -74,16 +68,15 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
         viewBinding?.mainRecycle?.apply {
             adapter = rvAdapter
             getLinerLayout()
-            addItemDecoration(SimpleDecorator(
-                marginValue = getValueInDp(value = 16f, requireContext()).toInt()
-            ))
-            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+            addItemDecoration(SimpleDecorator(marginValue =
+                getValueInDp(value = 8f, requireContext()).toInt()))
         }
     }
 
 
     fun onClickBtn(nameBtn : String) {
         isGridLayout = nameBtn == "secondBtn"
+        isThirdGridLayout = nameBtn == "thirdBtn"
         getLinerLayout()
         viewBinding?.mainRecycle?.adapter?.notifyDataSetChanged()
     }
@@ -114,33 +107,43 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
     fun getLinerLayout() {
         viewBinding?.mainRecycle?.apply {
             if (isGridLayout) {
-                layoutManager = GridLayoutManager(requireContext(), 3,RecyclerView.VERTICAL, false).apply {
-                    spanSizeLookup = object :
-                        GridLayoutManager.SpanSizeLookup() {
+                currentDisplayType = DisplayType.GRID
+                layoutManager = GridLayoutManager(context, 3, RecyclerView.VERTICAL, false).apply {
+                    spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
-                            return if (position == 0) {
-                                3
-                            } else {
-                                1
-                            }
+                            return if (position == 0) 3
+                            else 1
                         }
                     }
                 }
-            } else {
+            }
+            if (isThirdGridLayout){
+                currentDisplayType = DisplayType.VERTICAL_GRID
+                layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false).apply {
+                    spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            return if (position == 0 || (position - 1) % 4 in listOf(0, 3)) 2 else 1
+                        }
+                    }
+                }
+            }
+            if (!isGridLayout and !isThirdGridLayout) {
+                currentDisplayType = DisplayType.LIST
                 layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             }
         }
+        rvAdapter?.updateDisplayType(currentDisplayType)
     }
 
     fun addRandomItems(int: Int){
         var count = int
         while (count!= 0) {
-            val randomInt = Random.nextInt(1, currentDataList.size + 1)
+            val randomInt = Random.nextInt(1, ScreensContentRepository.getListContent(requireContext()).size)
             val randomInt2 = Random.nextInt(1, currentDataList.size + 1)
             currentDataList.add(randomInt2, ScreensContentRepository.getListContent(requireContext()).get(randomInt))
             count -= 1
         }
-        rvAdapter?.addRandomElem(currentDataList)
+        rvAdapter?.updateList(currentDataList)
     }
 
     fun deleteRandomItems(int : Int) {
@@ -149,25 +152,25 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
             currentDataList.subList(1, currentDataList.size).clear()
         } else {
             while (count!= 0) {
-                val randomIndex = Random.nextInt(1, currentDataList.size)
+                val randomIndex = Random.nextInt(1, currentDataList.size + 1)
                 currentDataList.removeAt(randomIndex)
                 count -= 1
             }
         }
-        rvAdapter?.deleteRandomElem(currentDataList)
+        rvAdapter?.updateList(currentDataList)
     }
 
     fun addRandomElem() {
-        val randomInt = Random.nextInt(1, currentDataList.size + 1)
+        val randomInt = Random.nextInt(1, ScreensContentRepository.getListContent(requireContext()).size)
         val randomInt2 = Random.nextInt(1, currentDataList.size + 1)
-        currentDataList.add(randomInt, ScreensContentRepository.getListContent(requireContext()).get(randomInt2))
-        rvAdapter?.addOneRandomElem(currentDataList)
+        currentDataList.add(randomInt2, ScreensContentRepository.getListContent(requireContext()).get(randomInt))
+        rvAdapter?.updateList(currentDataList)
     }
 
     fun deleteRandomElem() {
-        val randomInt = Random.nextInt(1, currentDataList.size)
+        val randomInt = Random.nextInt(1, currentDataList.size + 1)
         currentDataList.removeAt(randomInt)
-        rvAdapter?.deleteOneRandomElem(currentDataList)
+        rvAdapter?.updateList(currentDataList)
     }
 
 
@@ -178,6 +181,5 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
 
     companion object {
         const val TAG = "multiple_screen_fragment"
-        const val ARG_GRID = "is_grid_layout"
     }
 }

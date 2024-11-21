@@ -14,11 +14,15 @@ class SecondTypeViewHolder (
 
     fun bindItem(itemData : ButtonData) {
         with(viewBinding) {
-            firstBtn.setOnClickListener{
+            firstBtn.setOnClickListener {
                 action.invoke("firstBtn")
             }
-            secondBtn.setOnClickListener{
+            secondBtn.setOnClickListener {
                 action.invoke("secondBtn")
+            }
+
+            thirdBtn.setOnClickListener {
+                action.invoke("thirdBtn")
             }
 
         }

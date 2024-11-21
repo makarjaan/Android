@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
-        supportActionBar?.hide()
+
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().apply {
