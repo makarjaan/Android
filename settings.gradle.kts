@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidWork"
 include(":app")
- 
+include(":apphomework2")

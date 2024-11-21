@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">appHomework2</string>
+    <string name="firstBtn_text">Список</string>
+    <string name="secondBtn_text">Сетка1</string>
+    <string name="thirdBtn_text">Сетка2</string>
+    <string name="bottomText">Введите число</string>
+    <string name="first_bottom_text">Добавить элементы</string>
+    <string name="second_bottom_text">Удалить элементы</string>
+    <string name="third_bottom_text">Добавить случайный элемент</string>
+    <string name="fourth_bottom_text">Удалить случайный элемент</string>
+    <string name="homework">homework</string>
+</resources>
