@@ -3,10 +3,12 @@ package ru.itis.apphomework2.screens
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -19,6 +21,7 @@ import ru.itis.apphomework2.repository.ScreensContentRepository
 import ru.itis.apphomework2.repository.ScreensDetailedContentRepo
 import ru.itis.apphomework2.ui.decorator.SimpleDecorator
 import ru.itis.apphomework2.utils.DisplayType
+import ru.itis.apphomework2.utils.SwipeToDeleteCallback
 import ru.itis.apphomework2.utils.getValueInDp
 import kotlin.random.Random
 
@@ -46,6 +49,7 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
             currentDataList = ScreensContentRepository.getListContent(requireContext()).toMutableList()
         }
         initRecycleView()
+        swipeDelete()
     }
 
     private fun initViews() {
@@ -63,7 +67,8 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
             requestManager = Glide.with(requireContext()),
             items = currentDataList,
             action = ::onClick,
-            actionClickBtn = :: onClickBtn
+            actionClickBtn = :: onClickBtn,
+            onLongClick = :: onItemLongClick
         )
         viewBinding?.mainRecycle?.apply {
             adapter = rvAdapter
@@ -77,6 +82,13 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
     fun onClickBtn(nameBtn : String) {
         isGridLayout = nameBtn == "secondBtn"
         isThirdGridLayout = nameBtn == "thirdBtn"
+        if (isGridLayout) {
+            currentDisplayType = DisplayType.GRID
+        } else if (isThirdGridLayout) {
+            currentDisplayType = DisplayType.VERTICAL_GRID
+        } else {
+            currentDisplayType = DisplayType.LIST
+        }
         getLinerLayout()
         viewBinding?.mainRecycle?.adapter?.notifyDataSetChanged()
     }
@@ -107,7 +119,6 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
     fun getLinerLayout() {
         viewBinding?.mainRecycle?.apply {
             if (isGridLayout) {
-                currentDisplayType = DisplayType.GRID
                 layoutManager = GridLayoutManager(context, 3, RecyclerView.VERTICAL, false).apply {
                     spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
@@ -118,7 +129,6 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
                 }
             }
             if (isThirdGridLayout){
-                currentDisplayType = DisplayType.VERTICAL_GRID
                 layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false).apply {
                     spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
@@ -128,7 +138,6 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
                 }
             }
             if (!isGridLayout and !isThirdGridLayout) {
-                currentDisplayType = DisplayType.LIST
                 layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             }
         }
@@ -171,6 +180,46 @@ class MultipleTypesFragment : Fragment(R.layout.fragment_multiple_types) {
         val randomInt = Random.nextInt(1, currentDataList.size + 1)
         currentDataList.removeAt(randomInt)
         rvAdapter?.updateList(currentDataList)
+    }
+
+    fun swipeDelete() {
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                if (viewHolder.adapterPosition == 0 || currentDisplayType != DisplayType.LIST) {
+                    return makeMovementFlags(0, 0)
+                }
+                val swipeFlag = ItemTouchHelper.LEFT
+                return makeMovementFlags(0, swipeFlag)
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val pos = viewHolder.adapterPosition
+                if (pos != RecyclerView.NO_POSITION) {
+                    currentDataList.removeAt(pos)
+                    rvAdapter?.updateList(currentDataList)
+                }
+
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(viewBinding?.mainRecycle)
+
+    }
+
+    private fun onItemLongClick(position: Int) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Удалить элемент?")
+            .setMessage("Вы уверены, что хотите удалить этот элемент?")
+            .setPositiveButton("Удалить") { _, _ ->
+                currentDataList.removeAt(position)
+                rvAdapter?.updateList(currentDataList)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 
 

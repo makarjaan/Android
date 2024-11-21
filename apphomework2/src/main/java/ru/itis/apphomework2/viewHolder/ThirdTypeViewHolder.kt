@@ -8,7 +8,8 @@ import ru.itis.apphomework2.model.ListRecycleMainData
 class ThirdTypeViewHolder (
     private val viewBinding : ItenHolderGridElemOneBinding,
     private val requestManager : RequestManager,
-    private val action : (Int) -> Unit
+    private val action : (Int) -> Unit,
+    private val onLongClick: (Int) -> Unit
 ) : RecyclerView.ViewHolder(viewBinding.root) {
 
     fun bindItem(itemData : ListRecycleMainData) {
@@ -20,6 +21,11 @@ class ThirdTypeViewHolder (
 
             root.setOnClickListener {
                 action.invoke(adapterPosition)
+            }
+
+            root.setOnLongClickListener {
+                onLongClick.invoke(adapterPosition)
+                true
             }
         }
     }

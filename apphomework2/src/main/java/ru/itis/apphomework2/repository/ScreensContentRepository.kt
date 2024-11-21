@@ -84,6 +84,56 @@ object ScreensContentRepository {
             id = 15,
             imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/270df10e-2e72-4d8e-a49b-f84c751162a7/300x450",
             description = "Доктор Хаус"
+        ),
+        ListRecycleMainData(
+            id = 16,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/5fb7d956-d5fb-4189-9ec9-1a051aaa7f41/300x450",
+            description = "Триггер"
+        ),
+        ListRecycleMainData(
+            id = 17,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/1777765/dd78edfd-6a1f-486c-9a86-6acbca940418/300x450",
+            description = "Игра престолов"
+        ),
+        ListRecycleMainData(
+            id = 18,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/10592371/e2db42c4-4176-4a0f-b933-488412cd06a5/300x450",
+            description = "Беспринципные"
+        ),
+        ListRecycleMainData(
+            id = 19,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/4774061/ce90ef63-3c81-4aa7-95f0-f5bbe5123484/300x450",
+            description = "Монастырь"
+        ),
+        ListRecycleMainData(
+            id = 20,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/f28c1ea2-47b0-49d5-b11c-9608744f0233/300x450",
+            description = "Шерлок"
+        ),
+        ListRecycleMainData(
+            id = 21,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/4483445/7d26d955-bc98-4731-8ec1-277359f9afa6/300x450",
+            description = "Папины дочки. Новые"
+        ),
+        ListRecycleMainData(
+            id = 22,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/4486362/3266738a-2614-4ff1-a347-e95f7b90bddf/300x",
+            description = "Трудные подростки"
+        ),
+        ListRecycleMainData(
+            id = 23,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/35c2b0c2-742d-4fc4-be2e-aedad582f969/300x",
+            description = "Чернобыль"
+        ),
+        ListRecycleMainData(
+            id = 24,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/4303601/c2c45ca9-0270-4bb2-bb82-5de3f01effbc/300x450",
+            description = "Сверхъестественное",
+        ),
+        ListRecycleMainData(
+            id = 25,
+            imageUrl = "https://avatars.mds.yandex.net/get-kinopoisk-image/4303601/4639b97f-1ff6-4f63-b7f6-02ea1a14f553/300x450",
+            description = "Очень странные дела"
         )
     )
 }

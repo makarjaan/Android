@@ -31,6 +31,7 @@ class AdapterWithMultipleHolders(
     private val requestManager: RequestManager,
     private val action: (Int) -> Unit,
     private var actionClickBtn: (String) -> Unit,
+    private val onLongClick: (Int) -> Unit,
     items : List<ListData>,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -64,7 +65,7 @@ class AdapterWithMultipleHolders(
                         parent,
                         false
                     ),
-                    action = actionClickBtn
+                    action = actionClickBtn,
                 )
             }
 
@@ -76,7 +77,8 @@ class AdapterWithMultipleHolders(
                         false
                     ),
                     requestManager = requestManager,
-                    action = action
+                    action = action,
+                    onLongClick = onLongClick
                 )
             }
             R.layout.item_holder_gridsecond_elem_one -> {

@@ -9,7 +9,7 @@ import ru.itis.apphomework2.model.ButtonData
 
 class SecondTypeViewHolder (
     private val viewBinding : ItemHolderSecondBinding,
-    private val action: (String) -> Unit
+    private val action: (String) -> Unit,
 ) : RecyclerView.ViewHolder(viewBinding.root) {
 
     fun bindItem(itemData : ButtonData) {
