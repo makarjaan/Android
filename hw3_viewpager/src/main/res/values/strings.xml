@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">hw3_viewPager</string>
+    <string name="quest_num_tv">номер вопроса</string>
+    <string name="first_button_text">Предыдущий</string>
+    <string name="second_button_text">Следующий</string>
+    <string name="some_text">Какой-то текст</string>
+    <string name="end_text">Завершить</string>
+    <string name="thanks">Спасибо за ответы!</string>
+</resources>
